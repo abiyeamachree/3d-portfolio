@@ -1,18 +1,10 @@
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import React from 'react';
+import Home from './pages/Home'; // Make sure the path is correct based on your project structure
 
 const App = () => {
     return (
         <main className="bg-slate-300/20">
-            <Router>
-                <Navbar />
-                <Routes>
-                    <Route path="/home" element={'Home'} />
-                    <Route path="/about" element={'About'} />
-                    <Route path="/projects" element={'Projects'} />
-                    <Route path="/contact" element={'Contact'} />
-                </Routes>
-            </Router>
+            <Home />
         </main>
     );
 };
