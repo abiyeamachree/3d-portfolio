@@ -8,7 +8,7 @@ const Home = () => {
     const adjustOfficeForScreenSize = () => {
         let screenScale = null;
         let screenPosition = [0, -6.5, -43];
-        let islandRotation = [0.1, 4.7, 0]
+        let officeRotation = [0, -2.4, 0]
 
         if (window.innerWidth < 768) {
             screenScale = [5, 5, 5]
@@ -18,10 +18,10 @@ const Home = () => {
             screenPosition = [0, -6.5, -43];
         }
 
-        return [screenScale, screenPosition, islandRotation]
+        return [screenScale, screenPosition, officeRotation]
     }
 
-    const[officeScale, officePosition, islandRotation] = adjustOfficeForScreenSize();
+    const[officeScale, officePosition, officeRotation] = adjustOfficeForScreenSize();
 
   return (
     <section className="w-full h-screen relative">
@@ -31,16 +31,16 @@ const Home = () => {
         >
 
             <Suspense fallback={<Loader />}>
-                <directionalLight />
-                <ambientLight />
-                <pointLight />
-                <spotLight />
-                <hemisphereLight />
+                <directionalLight position={[1,1,1]} intensity={10} />
+                <ambientLight intensity={0.5}/>
+                {/* <pointLight /> */}
+                {/* <spotLight /> */}
+                {/* <hemisphereLight skyColor="#ble1ff" groundColor="#000000" intensity={1}/> */}
 
                 <Office 
                 position={officePosition}
                 scale={officeScale}
-                rotation={islandRotation}/>
+                rotation={officeRotation}/>
             </Suspense>
         </Canvas>
     </section>
