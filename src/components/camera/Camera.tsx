@@ -6,10 +6,12 @@ import { EventEmitter } from "events";
 import {
     FrameInstance,
     StartFrame,
-
+    LoadingFrame,
+    IdleFrame,
+    DeskFrame,
+    LaptopFrame,
 } from "./Frames";
 
-// Opted for TypeScript for enum functionality
 
 export enum CameraEnum {
     START = 'orbitControlsStart',

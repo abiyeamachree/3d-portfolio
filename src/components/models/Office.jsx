@@ -6,11 +6,9 @@ Files: office.gltf [133.49MB] > C:...office-transformed.glb [5.19MB] (96%)
 
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
-import { useFrame, useThree } from '@react-three/fiber';
 import { a } from '@react-spring/three';
 
-import officeScene from '../assets/3d/office.glb';
-
+import officeScene from '../../assets/3d/office.glb';
 const Office = (props) => {
   const officeRef = useRef();
   const { nodes, materials } = useGLTF(officeScene)

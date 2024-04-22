@@ -1,20 +1,20 @@
-import { React, Suspense } from 'react';
+import React from 'react';
+import { Suspense } from 'react';
 import Loader from './components/Loader';
 import { Canvas } from '@react-three/fiber';
-import Office from './models/Office';
+import Office from './components/models/Office';
+import { Vector3 } from 'three';
 
 const App = () => {
     const adjustOfficeForScreenSize = () => {
-        let screenScale = null;
-        let screenPosition = [0, -6.5, -43];
-        let officeRotation = [0, -2.4, 0]
+        let screenScale: number[] = [];
+        let screenPosition: number[] = [0, -6.5, -43];
+        let officeRotation: number[] = [0, -2.4, 0]
 
         if (window.innerWidth < 768) {
             screenScale = [5, 5, 5]
-            screenPosition = [0, -6.5, -43];
         } else {
             screenScale = [6, 6, 6]
-            screenPosition = [0, -6.5, -43];
         }
 
         return [screenScale, screenPosition, officeRotation]
