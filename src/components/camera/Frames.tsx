@@ -20,3 +20,8 @@ export class StartFrame extends FrameInstance {
         this.focalPoint.set(0, 0, 0);
     }
 }
+
+export class LoadingFrame extends FrameInstance{}
+export class IdleFrame extends FrameInstance{}
+export class DeskFrame extends FrameInstance{}  
+export class LaptopFrame extends FrameInstance{}    

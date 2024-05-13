@@ -21,22 +21,29 @@ export enum CameraEnum {
     LAPTOP = 'laptop',
 }
 
-export default class Camera extends EventEmitter {
+const Camera: React.FC = () => {
+    const { camera, gl } = useThree();
     
-    position: Vector3;
-    centrePoint: Vector3;
+    const position = new Vector3(0, 0, 0);
+    const centrePoint = new Vector3(0, -6.5, -40);
+    const orbitControls = new OrbitControls(camera, gl.domElement);
 
-    orbitControls: OrbitControls;
+    const [currentFrame, setCurrentFrame] = React.useState<CameraEnum | undefined>();
+    const [targetFrame, setTargetFrame] = React.useState<CameraEnum | undefined>();
+    const [frames, setFrames] = React.useState({
+        [CameraEnum.START]: new StartFrame(),
+        [CameraEnum.LOADING]: new LoadingFrame(),
+        [CameraEnum.IDLE]: new IdleFrame(),
+        [CameraEnum.DESK]: new DeskFrame(),
+        [CameraEnum.LAPTOP]: new LaptopFrame(),
+    });
 
-    currentFrame: CameraEnum | undefined;
-    targetFrame: CameraEnum | undefined;
-    frames: { [key in CameraEnum]:  } = {};
+    React.useEffect(() => {
+        orbitControls.target = centrePoint;
+        camera.position.copy(position);
+    }, [camera, centrePoint, orbitControls, position]);
 
-    constructor() {
-        super();
-        this.position = new Vector3(0, 0, 0);
-        this.centrePoint = new Vector3(0, 0, 0);
-
-        this.free = false;
-    }
+    return null;
 };
+
+export default Camera;
