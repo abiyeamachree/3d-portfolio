@@ -25,7 +25,7 @@ const Camera: React.FC = () => {
     const { camera, gl } = useThree();
     
     const position = new Vector3(0, 0, 0);
-    const centrePoint = new Vector3(0, -6.5, -40);
+    const centrePoint = new Vector3(0, 0, 100);
     const orbitControls = new OrbitControls(camera, gl.domElement);
 
     const [currentFrame, setCurrentFrame] = React.useState<CameraEnum | undefined>();
