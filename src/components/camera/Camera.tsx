@@ -23,10 +23,7 @@ export enum CameraEnum {
 
 const Camera: React.FC = () => {
     const { camera, gl } = useThree();
-    
-    const position = new Vector3(0, 0, 0);
-    const centrePoint = new Vector3(0, 0, 100);
-    const orbitControls = new OrbitControls(camera, gl.domElement);
+    const controlsRef = React.useRef<OrbitControls>();
 
     const [currentFrame, setCurrentFrame] = React.useState<CameraEnum | undefined>();
     const [targetFrame, setTargetFrame] = React.useState<CameraEnum | undefined>();
@@ -39,9 +36,33 @@ const Camera: React.FC = () => {
     });
 
     React.useEffect(() => {
-        orbitControls.target = centrePoint;
-        camera.position.copy(position);
-    }, [camera, centrePoint, orbitControls, position]);
+        controlsRef.current = new OrbitControls(camera, gl.domElement);
+        const controls = controlsRef.current;
+
+        controls.target.set(0, 0, 0);
+        controls.minDistance = 5; 
+        controls.maxDistance = 15; 
+        controls.enablePan = false;
+        controls.maxPolarAngle = (Math.PI / 2.1); // Disable rotation below ground
+        camera.position.set(0, 0, 50);
+
+        return () => {
+            controlsRef.current?.dispose();
+        };
+
+    }, [camera, gl]);
+
+    useFrame(() => {
+        const controls = controlsRef.current;
+        if (controls) {
+            const frame = frames[currentFrame];
+            if (frame) {
+                camera.position.lerp(frame.position, 0.1);
+                controls.target.lerp(frame.focalPoint, 0.1);
+                controls.update();
+            }
+        }
+    });
 
     return null;
 };
