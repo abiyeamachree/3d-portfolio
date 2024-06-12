@@ -5,19 +5,19 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { EventEmitter } from "events";
 import {
     FrameInstance,
-    StartFrame,
-    LoadingFrame,
-    IdleFrame,
-    DeskFrame,
-    LaptopFrame,
+    createStartFrame,
+    createLoadingFrame,
+    createDeskIdleFrame,
+    createDeskRotateFrame,
+    createLaptopFrame,
 } from "./Frames";
 
 
 export enum CameraEnum {
     START = 'orbitControlsStart',
     LOADING = 'loading',
-    IDLE = 'idle',
-    DESK = 'desk',
+    DESKIDLE = 'deskidle',
+    DESKROTATE = 'deskrotate',
     LAPTOP = 'laptop',
 }
 
@@ -25,14 +25,20 @@ const Camera: React.FC = () => {
     const { camera, gl } = useThree();
     const controlsRef = React.useRef<OrbitControls>();
 
+    const StartFrame = createStartFrame();
+    const LoadingFrame = createLoadingFrame();
+    const DeskIdleFrame = createDeskIdleFrame();
+    const DeskRotateFrame = createDeskRotateFrame();
+    const LaptopFrame = createLaptopFrame();
+
     const [currentFrame, setCurrentFrame] = React.useState<CameraEnum | undefined>();
     const [targetFrame, setTargetFrame] = React.useState<CameraEnum | undefined>();
     const [frames, setFrames] = React.useState({
-        [CameraEnum.START]: new StartFrame(),
-        [CameraEnum.LOADING]: new LoadingFrame(),
-        [CameraEnum.IDLE]: new IdleFrame(),
-        [CameraEnum.DESK]: new DeskFrame(),
-        [CameraEnum.LAPTOP]: new LaptopFrame(),
+        [CameraEnum.START]: StartFrame,
+        [CameraEnum.LOADING]: LoadingFrame,
+        [CameraEnum.DESKIDLE]: DeskIdleFrame,
+        [CameraEnum.DESKROTATE]: DeskRotateFrame,
+        [CameraEnum.LAPTOP]: LaptopFrame,
     });
 
     React.useEffect(() => {
@@ -53,13 +59,16 @@ const Camera: React.FC = () => {
     }, [camera, gl]);
 
     useFrame(() => {
-        const controls = controlsRef.current;
-        if (controls) {
-            const frame = frames[currentFrame];
-            if (frame) {
-                camera.position.lerp(frame.position, 0.1);
-                controls.target.lerp(frame.focalPoint, 0.1);
-                controls.update();
+        console.log(currentFrame)
+        if (currentFrame == CameraEnum.DESKROTATE){
+            const controls = controlsRef.current;
+            if (controls) {
+                const frame = frames[currentFrame];
+                if (frame) {
+                    camera.position.lerp(frame.position, 0.1);
+                    controls.target.lerp(frame.focalPoint, 0.1);
+                    controls.update();
+                }
             }
         }
     });
