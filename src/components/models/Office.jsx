@@ -16,7 +16,7 @@ const Office = (props) => {
     <a.group {...props} dispose={null}>
       <mesh geometry={nodes.Seat.geometry} material={materials.PaletteMaterial002} position={[2.002, 1.237, -0.703]} scale={[0.569, 0.048, 0.569]} />
       <mesh geometry={nodes.Mug.geometry} material={materials.PaletteMaterial003} position={[0.704, 2.138, -1.377]} rotation={[Math.PI, 0, Math.PI]} scale={2.023} />
-      <mesh geometry={nodes.Cube.geometry} material={materials.PaletteMaterial005} position={[-0.936, 43.282, -0.183]} rotation={[-3.12, 0.004, -0.018]} scale={[1.001, 2.307, 1.001]} />
+      <mesh geometry={nodes.Cube.geometry} material={materials.PaletteMaterial002} position={[-0.936, 43.282, -0.183]} rotation={[-3.12, 0.004, -0.018]} scale={[1.001, 2.307, 1.001]} />
       <mesh geometry={nodes.Desk001_Table_black_0.geometry} material={materials.PaletteMaterial001} position={[0.004, 1.187, 0.081]} rotation={[-Math.PI / 2, 0, Math.PI / 2]} scale={2.812} />
       <mesh geometry={nodes.Keyboard.geometry} material={materials['Material.002']} position={[-0.407, 2.102, 0.162]} rotation={[-Math.PI, 1.184, -Math.PI]} scale={2.724} />
       <mesh geometry={nodes.Plane002.geometry} material={materials['couro 2k']} position={[0.236, 2.079, -0.796]} rotation={[-0.036, 0.979, 0.03]} scale={1.98} />

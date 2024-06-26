@@ -2,11 +2,16 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-.btn-custom {
-    @apply px-4 py-2 bg-white text-black shadow-md;
-}
-
 body {
     font-family: 'Inter', sans-serif; 
     font-weight: 600;
+    font-size: small
+}
+
+.btn-custom {
+    @apply bg-white text-black shadow-md mr-1 px-1 rounded;
+}
+
+.btn-custom:hover {
+    @apply shadow-lg bg-gray-200;
 }
