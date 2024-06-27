@@ -22,6 +22,7 @@ export enum CameraEnum {
 
 interface CameraProps {
     cameraState: CameraEnum;
+    onClickDesk: () => void;
 }
 
 const Camera: React.FC<CameraProps> = ({ cameraState }) => {
@@ -71,6 +72,9 @@ const Camera: React.FC<CameraProps> = ({ cameraState }) => {
         } else if (cameraState === CameraEnum.DESKIDLE) {
             controls.enabled = false;
             camera.lookAt(0, 0, 0)
+        } else if (cameraState === CameraEnum.LAPTOP) {
+            controls.enabled = false;
+            camera.lookAt(0,2,0)
         }
 
     }, [cameraState]);
