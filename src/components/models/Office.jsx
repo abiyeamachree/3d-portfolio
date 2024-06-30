@@ -9,11 +9,18 @@ import { useGLTF } from '@react-three/drei';
 import { a } from '@react-spring/three';
 
 import officeScene from '../../assets/3d/office.glb';
-const Office = (props) => {
+import Hitbox from '../Hitbox'; 
+
+const Office = ({ onDeskClick}) => {
   const officeRef = useRef();
   const { nodes, materials } = useGLTF(officeScene)
   return (
-    <a.group {...props} dispose={null}>
+    <a.group dispose={null}>
+      <Hitbox
+        position={[0, 0, 0]} 
+        radius = {10} 
+        onClick={onDeskClick} 
+      />
       <mesh geometry={nodes.Seat.geometry} material={materials.PaletteMaterial002} position={[2.002, 1.237, -0.703]} scale={[0.569, 0.048, 0.569]} />
       <mesh geometry={nodes.Mug.geometry} material={materials.PaletteMaterial003} position={[0.704, 2.138, -1.377]} rotation={[Math.PI, 0, Math.PI]} scale={2.023} />
       <mesh geometry={nodes.Cube.geometry} material={materials.PaletteMaterial002} position={[-0.936, 43.282, -0.183]} rotation={[-3.12, 0.004, -0.018]} scale={[1.001, 2.307, 1.001]} />

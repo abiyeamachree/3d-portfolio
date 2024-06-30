@@ -22,10 +22,10 @@ export enum CameraEnum {
 
 interface CameraProps {
     cameraState: CameraEnum;
-    onClickDesk: () => void;
+    onDeskClick: () => void;
 }
 
-const Camera: React.FC<CameraProps> = ({ cameraState }) => {
+const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick }) => {
     const { camera, gl } = useThree();
     const controlsRef = React.useRef<OrbitControls | null>(null);
     const [lastIdlePosition, setLastIdlePosition] = React.useState({ x: 0, y: 0, z: 0 });
@@ -74,7 +74,8 @@ const Camera: React.FC<CameraProps> = ({ cameraState }) => {
             camera.lookAt(0, 0, 0)
         } else if (cameraState === CameraEnum.LAPTOP) {
             controls.enabled = false;
-            camera.lookAt(0,2,0)
+            camera.position.set(2.002, 2.2, -0.703);  
+            camera.lookAt(-2, 2.138, 0); 
         }
 
     }, [cameraState]);

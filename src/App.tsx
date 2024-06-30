@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Suspense } from 'react';
 import Loader from './components/Loader';
 import { Canvas } from '@react-three/fiber';
-import Office from './components/models/Office';
+import Office from './components/models/Office.jsx';
 import Camera, { CameraEnum } from './components/camera/Camera';
 import "./styles/index.css";
 
@@ -14,6 +14,13 @@ const App: React.FC = () => {
         setCameraState(prevState => 
             prevState === CameraEnum.DESKROTATE ? CameraEnum.DESKIDLE : CameraEnum.DESKROTATE
         );
+    };
+
+    const handleDeskClick = () => {
+        if(cameraState != CameraEnum.DESKROTATE){
+            console.log("wnovjs")
+            setCameraState(CameraEnum.LAPTOP);
+        }
     };
 
     useEffect(() => {
@@ -37,11 +44,11 @@ const App: React.FC = () => {
                 shadows
                 camera={{ near: 0.1, far: 1000}}
             >
-                <Camera cameraState={cameraState}/>
+                <Camera cameraState={cameraState} onDeskClick={handleDeskClick}/>
                 <Suspense fallback={<Loader />}>
                     <ambientLight intensity={0.25}/>
                     <spotLight position={[0, 10, 0]} intensity={250} angle={Math.PI / 6} penumbra={0.6} castShadow/>
-                    <Office/>    
+                    <Office onDeskClick={handleDeskClick}/>    
                 </Suspense>
             </Canvas>
             {showText && (
