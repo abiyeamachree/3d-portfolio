@@ -3,41 +3,30 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { EventEmitter } from "events";
 import TWEEN from '@tweenjs/tween.js';
-import {
-    createStartFrame,
-    createLoadingFrame,
-    createDeskIdleFrame,
-    createDeskRotateFrame,
-    createLaptopFrame,
-} from "./Frames";
-
 
 export enum CameraEnum {
     START = 'orbitControlsStart',
     LOADING = 'loading', // The initial loading screen
-    DESKIDLE = 'deskidle', // The camera slowly pans around the desk
-    DESKROTATE = 'deskrotate', // The camera may be controlled by the user
-    LAPTOP = 'laptop', // The camera is fixated on the laptop
+    IDLE = 'idle', // The camera slowly pans around the desk
+    ROTATE = 'rotate', // The camera may be controlled by the user
+    DESK = 'desk', // The camera is fixated on the desk
+    LAPTOP = 'laptop' // The camera is fixated on the laptop screen
 }
 
 interface CameraProps {
     cameraState: CameraEnum;
     onDeskClick: () => void;
+    onLaptopClick: () => void;
 }
 
-const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick }) => {
+const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick }) => {
     const { camera, gl } = useThree();
     const controlsRef = React.useRef<OrbitControls | null>(null);
-    const [lastIdlePosition, setLastIdlePosition] = React.useState({ x: 0, y: 0, z: 0 });
-    const [currentFrame, setCurrentFrame] = React.useState<CameraEnum | undefined>(cameraState);
+    const [lastIdlePosition, setLastIdlePosition] = React.useState({ x: 0, y: 4, z: 0 });
+    const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
-    const frames = {
-        [CameraEnum.START]: createStartFrame(),
-        [CameraEnum.LOADING]: createLoadingFrame(),
-        [CameraEnum.DESKIDLE]: createDeskIdleFrame(),
-        [CameraEnum.DESKROTATE]: createDeskRotateFrame(),
-        [CameraEnum.LAPTOP]: createLaptopFrame(),
-    };
+    const targetPosition = React.useState({ x: 0, y: 0, z: 0 });
+    const targetLookAt = React.useState({ x: 0, y: 0, z: 0 });
 
     // Run when camera and gl are initialised.
     React.useEffect(() => {
@@ -58,46 +47,68 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick }) => {
 
     }, [camera, gl]);
 
-    // Run when there is a change to cameraState (e.g DESKROTATE -> DESKIDLE & vice versa).
+    // Run when there is a change to cameraState (e.g ROTATE -> IDLE & vice versa).
     React.useEffect(() => {
         if (!controlsRef.current) return;
         const controls = controlsRef.current;
         
-        if (cameraState === CameraEnum.DESKROTATE){
+        if (cameraState === CameraEnum.ROTATE){
             if (controls) {
+                camera.position.set(10, 5, 0)
                 controls.target.set(0, 0, 0);
                 controls.enabled = true;
                 controls.update();             
             }
-        } else if (cameraState === CameraEnum.DESKIDLE) {
+        } else if (cameraState === CameraEnum.IDLE) {
+            camera.position.set(lastIdlePosition.x, lastIdlePosition.y, lastIdlePosition.z)
             controls.enabled = false;
             camera.lookAt(0, 0, 0)
-        } else if (cameraState === CameraEnum.LAPTOP) {
+        } else if (cameraState === CameraEnum.DESK) {
             controls.enabled = false;
-            camera.position.set(2.002, 2.2, -0.703);  
+            camera.position.set(2.002, 3, -0.703);  
             camera.lookAt(-2, 2.138, 0); 
         }
 
     }, [cameraState]);
 
+    // Mouse move event listener
     React.useEffect(() => {
-        if (currentFrame !== CameraEnum.DESKIDLE) {
-            // Store the last position when leaving DESKIDLE state
+        const handleMouseMove = (event: MouseEvent) => {
+            setMousePos({
+                x: (event.clientX / window.innerWidth) * 2 - 1,
+                y: -(event.clientY / window.innerHeight) * 2 + 1,
+            });
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+        };
+    }, []);
+
+    React.useEffect(() => {
+        if (cameraState == CameraEnum.ROTATE) {
+            // Store the last position when leaving ROTATE state
             setLastIdlePosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
         }
-    }, [currentFrame, camera]);
+    }, [cameraState, camera]);
 
     // Run every frame.
     useFrame(() => {
-        if (cameraState === CameraEnum.DESKIDLE) {
+        if (cameraState === CameraEnum.IDLE) {
             const { x, y, z } = lastIdlePosition;
-            const time = Date.now() * 0.00005;
-            camera.position.x = x + 10 * Math.sin(time);
-            camera.position.z = z + 10 * Math.cos(time);
+            const time = Date.now() * 0.00003;
+            camera.position.x = (x + 10 * Math.sin(time));
+            camera.position.z = (z + 10 * Math.cos(time));
             camera.lookAt(0, 0, 0);
+        } else if (cameraState === CameraEnum.DESK) {
+            const moveZ = (mousePos.x * 0.5);
+            const moveY = (mousePos.y * 0.5);
+
+            camera.lookAt(-2, 2.138 + moveY, -moveZ);
         }
     });
-
+    
     return null;
 };
 
