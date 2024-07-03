@@ -67,6 +67,10 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick
             controls.enabled = false;
             camera.position.set(2.002, 3, -0.703);  
             camera.lookAt(-2, 2.138, 0); 
+        } else if (cameraState === CameraEnum.LAPTOP) {
+            controls.enabled = false
+            camera.position.set(-0.05, 2.6, 0);  
+            camera.lookAt(-0.78, 2.38, 0.3); 
         }
 
     }, [cameraState]);

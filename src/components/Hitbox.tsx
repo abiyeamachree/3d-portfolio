@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
+import { Sphere } from '@react-three/drei';
 
 interface HitboxProps {
   position: THREE.Vector3;
   radius: number;
   onClick: () => void;
+  troubleshoot: boolean;
 }
 
-const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick }) => {
+const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick, troubleshoot = true }) => {
   const { camera } = useThree();
   const mouse = new THREE.Vector2();
 
@@ -38,7 +40,17 @@ const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick }) => {
     };
   }, [camera, position, radius, onClick]);
 
-  return null;
+  if (!troubleshoot) {
+    return null;
+  }
+
+  return (
+    <mesh position={position}>
+      <Sphere args={[radius, 32, 32]}>
+        <meshBasicMaterial color="red" wireframe />
+      </Sphere>
+    </mesh>
+  );
 };
 
 export default Hitbox;

@@ -18,12 +18,12 @@ const Office = ({ onDeskClick, onLaptopClick }) => {
     <a.group dispose={null}>
       <Hitbox
         position={[0, 0, 0]} 
-        radius = {5} 
+        radius = {4} 
         onClick={onDeskClick} 
       />
       <Hitbox
-        position={[-0.407, 2.102, 0.162]} 
-        radius = {3} 
+        position={[-0.179, 2.2, 0.062]} 
+        radius = {0.8} 
         onClick={onLaptopClick} 
       />
       <mesh geometry={nodes.Seat.geometry} material={materials.PaletteMaterial002} position={[2.002, 1.237, -0.703]} scale={[0.569, 0.048, 0.569]} />
