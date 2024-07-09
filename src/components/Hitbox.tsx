@@ -1,34 +1,32 @@
 import React, { useEffect } from 'react';
-import { useThree } from '@react-three/fiber';
+import { useThree, useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Sphere } from '@react-three/drei';
 
 interface HitboxProps {
-  position: THREE.Vector3;
+  position: [number, number, number];
   radius: number;
   onClick: () => void;
-  troubleshoot: boolean;
+  troubleshoot?: boolean;
 }
 
-const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick, troubleshoot = true }) => {
-  const { camera } = useThree();
+const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick, troubleshoot = false }) => {
+  const { camera, gl, scene } = useThree();
   const mouse = new THREE.Vector2();
+  const raycaster = new THREE.Raycaster();
+  const sphereRef = React.useRef<THREE.Mesh>(null);
 
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
-      event.preventDefault();
+
       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-      vector.unproject(camera);
+      raycaster.setFromCamera(mouse, camera);
 
-      const dir = vector.sub(camera.position).normalize();
-      const distance = -camera.position.z / dir.z;
-      const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+      const intersects = raycaster.intersectObject(sphereRef.current!, true);
 
-      const distanceToCenter = pos.distanceTo(new THREE.Vector3(position.x, position.y, position.z));
-      if (distanceToCenter <= radius) {
+      if (intersects.length > 0) {
         onClick();
       }
     };
@@ -38,17 +36,15 @@ const Hitbox: React.FC<HitboxProps> = ({ position, radius, onClick, troubleshoot
     return () => {
       window.removeEventListener('mousedown', handleClick);
     };
-  }, [camera, position, radius, onClick]);
-
-  if (!troubleshoot) {
-    return null;
-  }
+  }, [camera, onClick, raycaster]);
 
   return (
-    <mesh position={position}>
-      <Sphere args={[radius, 32, 32]}>
-        <meshBasicMaterial color="red" wireframe />
-      </Sphere>
+    <mesh ref={sphereRef} position={position}>
+      {troubleshoot && (
+        <Sphere args={[radius, 32, 32]}>
+          <meshBasicMaterial color="red" wireframe />
+        </Sphere>
+      )}
     </mesh>
   );
 };
