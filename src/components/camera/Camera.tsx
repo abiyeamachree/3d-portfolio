@@ -34,8 +34,8 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick
         const controls = controlsRef.current;
 
         controls.target.set(0, 0, 0);
-        controls.minDistance = 5; 
-        controls.maxDistance = 10; 
+        controls.minDistance = 1; 
+        controls.maxDistance = 2; 
         controls.enablePan = false;
         controls.maxPolarAngle = (Math.PI / 2.1); // Disable rotation below ground
         camera.position.set(0, 5, 0);
