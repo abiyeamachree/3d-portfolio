@@ -50,11 +50,10 @@ const App: React.FC = () => {
             >
                 <Camera cameraState={cameraState} onDeskClick={handleDeskClick} onLaptopClick={handleLaptopClick} />
                 <Suspense fallback={<Loader />}>
-                    <ambientLight intensity={0.20}/>
                     <spotLight
                         position={[0, 10, 0]}
-                        intensity={250} 
-                        angle={Math.PI / 30}
+                        intensity={450} 
+                        angle={Math.PI / 20}
                         penumbra={0.8} 
                         castShadow
                     />

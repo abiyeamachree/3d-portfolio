@@ -6,7 +6,7 @@ import { Canvas } from '@react-three/fiber';
 import MiniSite from '../mini-site/MiniSite';
 import Hitbox from '../Hitbox';
 
-import officeDraco from '../../assets/3d/office_draco.glb';
+import officeDraco from '../../assets/3d/office_draco2.glb';
 
 // Path to Draco decoder files
 const dracoDecoderPath = '/path_to_draco_decoder/';

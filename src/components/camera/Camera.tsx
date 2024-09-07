@@ -91,27 +91,26 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick
     }, []);
 
     React.useEffect(() => {
-        if (cameraState == CameraEnum.ROTATE) {
-            // Store the last position when leaving ROTATE state
-            setLastIdlePosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
-        }
+        setLastIdlePosition({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
     }, [cameraState, camera]);
 
     // Run every frame.
     useFrame(() => {
         if (cameraState === CameraEnum.IDLE) {
-            const { x, y, z } = lastIdlePosition;
-            const time = Date.now() * 0.00003;
-            camera.position.x = (x + 10 * Math.sin(time));
-            camera.position.z = (z + 10 * Math.cos(time));
-            camera.lookAt(0, 0, 0);
+            const time = Date.now() * 0.0003;
+            const radius = 2;  // Set a consistent radius for the orbiting distance
+            camera.position.x = radius * Math.sin(time);  // Keep the camera at the same distance
+            camera.position.z = radius * Math.cos(time);
+            camera.position.y = 1;  // Maintain the same height
+            camera.lookAt(0, 0, 0);  // Keep the camera focused on the desk
         } else if (cameraState === CameraEnum.DESK) {
             const moveZ = (mousePos.x * 0.5);
             const moveY = (mousePos.y * 0.5);
-
+    
             camera.lookAt(-2, 2.138 + moveY, -moveZ);
         }
     });
+    
     
     return null;
 };
