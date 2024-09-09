@@ -52,7 +52,7 @@ const App: React.FC = () => {
                 <Suspense fallback={<Loader />}>
                     <spotLight
                         position={[0, 10, 0]}
-                        intensity={450} 
+                        intensity={850} 
                         angle={Math.PI / 20}
                         penumbra={0.8} 
                         castShadow

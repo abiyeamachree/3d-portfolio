@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { a } from '@react-spring/three'; 
 import { Canvas } from '@react-three/fiber';
 import MiniSite from '../mini-site/MiniSite';
 import Hitbox from '../Hitbox';
@@ -19,7 +20,17 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
   });
 
   return (
-    <group dispose={null}>
+    <a.group dispose={null}>
+      <Hitbox
+        position={[0, 0, 0]} 
+        radius = {0.8} 
+        onClick={onDeskClick} 
+      />
+      <Hitbox
+        position={[0,0.3,0]} 
+        radius = {0.2} 
+        onClick={onLaptopClick} 
+      />
       <mesh
         castShadow
         receiveShadow
@@ -51,6 +62,7 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
           geometry={nodes.Cube008.geometry}
           material={materials['Material.019']}
         />
+        {/* Monitor 1 Screen */}
         <mesh
           castShadow
           receiveShadow
@@ -68,6 +80,7 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
           geometry={nodes.Cube009_1.geometry}
           material={materials['Material.019']}
         />
+        {/* Monitor 2 Screen */}
         <mesh
           castShadow
           receiveShadow
@@ -302,6 +315,7 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
           geometry={nodes.Cube066.geometry}
           material={materials['Material.024']}
         />
+        {/* Tablet Screen */}
         <mesh
           castShadow
           receiveShadow
@@ -994,7 +1008,7 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
           material={materials['Material.006']}
         />
       </group>
-    </group>
+    </a.group>
   )
 }
 
