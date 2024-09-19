@@ -22,12 +22,6 @@ const App: React.FC = () => {
         }
     };
 
-    const handleLaptopClick = () => {
-        if(cameraState == CameraEnum.DESK){
-            setCameraState(CameraEnum.LAPTOP)
-        }
-    }
-
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowText(false);
@@ -48,16 +42,19 @@ const App: React.FC = () => {
                 className="w-full h-screen bg-transparent"
                 shadows
             >
-                <Camera cameraState={cameraState} onDeskClick={handleDeskClick} onLaptopClick={handleLaptopClick} />
+                <Camera cameraState={cameraState} onDeskClick={handleDeskClick} />
                 <Suspense fallback={<Loader />}>
+                    <ambientLight
+                        intensity={0.15}
+                    />
                     <spotLight
                         position={[0, 10, 0]}
-                        intensity={850} 
-                        angle={Math.PI / 20}
+                        intensity={450} 
+                        angle={Math.PI / 30}
                         penumbra={0.8} 
                         castShadow
                     />
-                    <Office onDeskClick={handleDeskClick} onLaptopClick={handleLaptopClick}/>    
+                    <Office onDeskClick={handleDeskClick} />    
                 </Suspense>
             </Canvas>
             {showText && (cameraState == CameraEnum.IDLE || cameraState == CameraEnum.ROTATE) && (

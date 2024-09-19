@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html } from '@react-three/drei';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { a } from '@react-spring/three'; 
@@ -7,12 +7,12 @@ import { Canvas } from '@react-three/fiber';
 import MiniSite from '../mini-site/MiniSite';
 import Hitbox from '../Hitbox';
 
-import officeDraco from '../../assets/3d/office_draco2.glb';
+import officeDraco from '../../assets/3d/office_draco.glb';
 
 // Path to Draco decoder files
 const dracoDecoderPath = '/path_to_draco_decoder/';
 
-export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => void }> = ({ onDeskClick, onLaptopClick }) => {
+export const Office: React.FC<{ onDeskClick: () => void }> = ({ onDeskClick }) => {
   const { nodes, materials } = useGLTF(officeDraco, (loader) => {
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath(dracoDecoderPath);
@@ -25,11 +25,6 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
         position={[0, 0, 0]} 
         radius = {0.8} 
         onClick={onDeskClick} 
-      />
-      <Hitbox
-        position={[0,0.3,0]} 
-        radius = {0.2} 
-        onClick={onLaptopClick} 
       />
       <mesh
         castShadow
@@ -67,8 +62,8 @@ export const Office: React.FC<{ onDeskClick: () => void; onLaptopClick: () => vo
           castShadow
           receiveShadow
           geometry={nodes.Cube008_1.geometry}
-          material={materials['Material.020']}
-        />
+          material={materials['Material.020']}>
+        </mesh>
       </group>
       <group
         position={[-0.188, 0.389, 0.269]}

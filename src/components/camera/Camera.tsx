@@ -3,21 +3,19 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'; // Correct path
 
 export enum CameraEnum {
-    START = 'orbitControlsStart',
-    LOADING = 'loading',
-    IDLE = 'idle',
-    ROTATE = 'rotate',
-    DESK = 'desk',
-    LAPTOP = 'laptop'
+    START = 'orbitControlsStart', // Initial State
+    LOADING = 'loading', // Loading Screen State
+    IDLE = 'idle', // The camera slowly moves around the desk
+    ROTATE = 'rotate', // The camera can be rotated by the user around the desk
+    DESK = 'desk', // The camera is fixated on the monitors, positioned in the chair
 }
 
 interface CameraProps {
     cameraState: CameraEnum;
     onDeskClick: () => void;
-    onLaptopClick: () => void;
 }
 
-const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick }) => {
+const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick }) => {
     const { camera, gl } = useThree();
     const controlsRef = React.useRef<OrbitControls | null>(null);
     const [lastIdlePosition, setLastIdlePosition] = React.useState({ x: 0, y: 5, z: 10 });
@@ -59,10 +57,6 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick
             camera.position.set(0.5, 0.5, 0);
             camera.lookAt(0, 0, 0);
             controls.update();
-        } else if (cameraState === CameraEnum.LAPTOP) {
-            controls.enabled = false;
-            camera.position.set(-0.05, 2.6, 0);
-            camera.lookAt(-0.78, 2.38, 0.3);
         }
     }, [cameraState]);
 
@@ -92,12 +86,15 @@ const Camera: React.FC<CameraProps> = ({ cameraState, onDeskClick, onLaptopClick
         if (cameraState === CameraEnum.IDLE) {
             const time = Date.now() * 0.0001;
             const radius = 2;
+    
 
-            const progress = (Math.sin(time) + 1) / 2;
-            const angle = progress * Math.PI;
-
+            const startOffset = 0.25; 
+            
+            const progress = (Math.sin(time + startOffset * Math.PI * 2) + 1) / 2;
+            const angle = (0.5 * progress + 0.5 / 2) * Math.PI;
+    
             camera.position.x = radius * Math.sin(angle);
-            camera.position.z = radius * Math.cos(angle);
+            camera.position.z = (radius * Math.cos(angle) / 2);
             camera.position.y = 1;
             camera.lookAt(0, 0, 0);
         } else if (cameraState === CameraEnum.DESK) {
