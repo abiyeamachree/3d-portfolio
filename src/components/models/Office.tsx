@@ -1,11 +1,8 @@
 import React, { useRef } from 'react';
 import { useGLTF, Html } from '@react-three/drei';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { a } from '@react-spring/three'; 
-import { Canvas } from '@react-three/fiber';
-import MiniSite from '../mini-site/MiniSite';
 import Hitbox from '../Hitbox';
+import Screen from '../Screen';
 
 import officeDraco from '../../assets/3d/office_draco.glb';
 
@@ -13,11 +10,7 @@ import officeDraco from '../../assets/3d/office_draco.glb';
 const dracoDecoderPath = '/path_to_draco_decoder/';
 
 export const Office: React.FC<{ onDeskClick: () => void }> = ({ onDeskClick }) => {
-  const { nodes, materials } = useGLTF(officeDraco, (loader) => {
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath(dracoDecoderPath);
-    (loader as GLTFLoader).setDRACOLoader(dracoLoader);
-  });
+  const { nodes, materials } = useGLTF(officeDraco) as any;
 
   return (
     <a.group dispose={null}>
@@ -76,12 +69,14 @@ export const Office: React.FC<{ onDeskClick: () => void }> = ({ onDeskClick }) =
           material={materials['Material.019']}
         />
         {/* Monitor 2 Screen */}
+
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Cube009_2.geometry}
           material={materials['Material.020']}
         />
+        <Screen />
       </group>
       <mesh
         castShadow
